@@ -7,24 +7,18 @@ version=6.12.0
 host="$tools/Qt/$version/macos"
 simulator="$tools/Qt/$version/ios-simulator-arm64"
 mkdir -p "$tools"
+python="${SQLITE_POC_PYTHON:-python3.13}"
 
-for command in python3 curl tar xcodebuild brew; do
+for command in "$python" curl tar xcodebuild; do
     command -v "$command" >/dev/null || { echo "Missing prerequisite: $command"; exit 1; }
 done
-ruby_bin="$(brew --prefix ruby)/bin"
-if [[ ! -x "$ruby_bin/gem" ]]; then
-    echo 'Homebrew Ruby is required to install CocoaPods.'
-    exit 1
-fi
+"$python" -c 'import sys; assert sys.version_info[:2] == (3, 13), "Use Python 3.13 for this tool environment"'
 
-if [[ ! -x "$tools/venv/bin/python" ]]; then
-    python3 -m venv "$tools/venv"
+if [[ ! -x "$tools/venv-python313/bin/python" ]]; then
+    "$python" -m venv "$tools/venv-python313"
 fi
-"$tools/venv/bin/python" -m pip install 'aqtinstall==3.3.0' 'cmake==4.4.4' 'ninja==1.13.2'
-export PATH="$tools/venv/bin:$PATH"
-if [[ ! -x "$tools/gems/bin/pod" ]]; then
-    "$ruby_bin/gem" install cocoapods -v 1.16.2 --install-dir "$tools/gems" --no-document
-fi
+"$tools/venv-python313/bin/python" -m pip install 'aqtinstall==3.3.0' 'cmake==4.4.4' 'ninja==1.13.2'
+export PATH="$tools/venv-python313/bin:$PATH"
 
 if [[ ! -x "$host/libexec/moc" ]]; then
     aqt install-qt mac desktop "$version" clang_64 --archives qtbase --outputdir "$tools/Qt"
@@ -39,8 +33,8 @@ if [[ ! -x "$simulator/bin/qt-cmake" ]]; then
         curl -fL --retry 2 -o "$archive" "https://download.qt.io/official_releases/qt/6.12/$version/submodules/qtbase-everywhere-src-$version.tar.xz"
         tar -xf "$archive" -C "$tools"
     fi
-    mkdir -p "$tools/qt-simulator-build"
-    cd "$tools/qt-simulator-build"
+    mkdir -p "$tools/qt-simulator-build-python313"
+    cd "$tools/qt-simulator-build-python313"
     "$source_dir/configure" -platform macx-ios-clang -sdk iphonesimulator -release \
         -opensource -confirm-license -nomake examples -nomake tests \
         -qt-host-path "$host" -prefix "$simulator" -- -DCMAKE_OSX_ARCHITECTURES=arm64

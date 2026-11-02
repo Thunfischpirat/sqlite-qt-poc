@@ -16,7 +16,6 @@ extern "C" char *sqlitePocRun(const char *path)
 {
     QJsonObject result;
     try {
-        // The iOS adapter calls on the main thread and keeps Qt alive between runs.
         static int argc = 1;
         static char name[] = "SqlitePoc";
         static char *argv[] = {name, nullptr};

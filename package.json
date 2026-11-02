@@ -1,6 +1,6 @@
 {
   "name": "com.example.sqlitepoc",
-  "displayName": "SqliteAndroidPoc",
+  "displayName": "SqliteMobilePoc",
   "version": "1.0.0",
   "description": "Cordova to Qt SQLite proof of concept for Android and iOS.",
   "scripts": {
@@ -11,6 +11,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
+    "cordova": "13.0.0",
     "cordova-android": "^15.1.0",
     "cordova-ios": "8.1.1",
     "cordova-plugin-sqlite-poc": "file:native-plugin"
@@ -23,5 +24,10 @@
     "plugins": {
       "cordova-plugin-sqlite-poc": {}
     }
+  },
+  "overrides": {
+    "xcode": "4.0.0",
+    "glob": "14.0.3",
+    "minimatch": "11.0.4"
   }
 }

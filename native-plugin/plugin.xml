@@ -24,7 +24,6 @@
         <framework src="Security.framework" />
         <framework src="SystemConfiguration.framework" />
         <framework src="UniformTypeIdentifiers.framework" />
-        <framework src="MobileCoreServices.framework" />
         <framework src="libz.tbd" />
         <framework src="libc++.tbd" />
     </platform>

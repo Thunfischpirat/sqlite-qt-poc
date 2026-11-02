@@ -22,7 +22,7 @@ Android loads the Qt SQLite driver as a library. On iOS, Qt and the driver are l
 
 ## Android on Windows
 
-Requires Python 3.10+ (64-bit), JDK 21, Node.js/npm, Cordova CLI and Android SDK 36 with platform-tools and command-line tools. Set `JAVA_HOME` and `ANDROID_HOME`.
+Requires Python 3.10+ (64-bit), JDK 21, Node.js 24 with npm, Cordova CLI and Android SDK 36 with platform-tools and command-line tools. Set `JAVA_HOME` and `ANDROID_HOME`.
 
 ```powershell
 ./build.ps1
@@ -33,20 +33,26 @@ The build script prepares its Qt/C++ tools and creates a debug APK. A connected,
 
 ## iOS simulator on an Apple Silicon Mac
 
-Use a separate Mac checkout or copy of the project, without generated Android files. Requires Xcode with an iOS 18 or newer simulator, Node 20.17+, Cordova CLI, Python 3 and Homebrew Ruby. For example, on the Mac used for this PoC, `nvm use 20` selects the installed Node version.
+Requires Xcode with an iOS simulator, nvm and Python 3.13. Run these commands from the project directory.
 
-Run the one-time setup from the project directory:
+One-time setup:
 
 ```bash
+nvm install 24
+nvm use 24
 bash setup-ios.sh
 ```
 
-It puts CMake, Ninja, CocoaPods and Qt 6.12 under `~/Christian/sqlite-poc-tools`. Qt's prebuilt iOS simulator library is for Intel, so setup builds a native ARM64 simulator kit from Qt source; the first setup takes several minutes. Set `SQLITE_POC_TOOLS` before both commands to choose another tools directory.
+Setup downloads and builds Qt and can take several minutes.
 
-Build or rebuild the app:
+Build and open the app:
 
 ```bash
+nvm use 24
 bash build-ios.sh
+npx cordova run ios --emulator --nobuild --target="iPhone-17-Pro, 26.2"
 ```
 
-Open `platforms/ios/App.xcworkspace` in Xcode, select an iPad simulator and run the `App` scheme. Alternatively, install `platforms/ios/build/Debug-iphonesimulator/SqliteAndroidPoc.app` using `xcrun simctl`. This build targets the Apple Silicon simulator; deploying to a physical iPhone or iPad requires a device build and Xcode signing setup.
+For another iPhone or iPad, run `npx cordova run ios --list` and choose a target running iOS 18 or newer.
+
+Setup was tested on the Mac Mini in our server room.
