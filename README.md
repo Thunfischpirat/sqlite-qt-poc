@@ -4,10 +4,14 @@ The same screen calls the same Qt SQL demonstration on Android and iOS. It creat
 
 ## Follow the code
 
-```text
-                               Android: Java → JNI ──────┐
-HTML → JavaScript → Cordova                              ├→ shared C++ → Qt SQL → SQLite
-                               iOS:     Swift → C bridge ─┘
+```mermaid
+flowchart LR
+    HTML --> JavaScript --> Cordova
+    Cordova -->|Android| Java --> JNI
+    Cordova -->|iOS| Swift --> CBridge["C bridge"]
+    JNI --> Shared["shared C++"]
+    CBridge --> Shared
+    Shared --> QtSQL["Qt SQL"] --> SQLite
 ```
 
 | Layer | Source | Responsibility |
